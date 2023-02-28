@@ -1,0 +1,25 @@
+# docker-compose up -d
+# docker-compose ps
+# docker-compose down
+# tail -f ./mysql/log/general-log.log | grep Query
+version: '3.3'
+services:
+  db:
+    image: mysql:8.0.32
+    command: --innodb-use-native-aio=0 --general-log=0 --general-log-file=/var/lib/log/general-log.log
+    container_name: mysql-algafood-api
+    restart: always
+    tty: true
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/log:/var/lib/log
+    environment:
+      MYSQL_DATABASE: 'algafood-api-local'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - '3300:3306'
+    expose:
+      - '3300'
